@@ -4,11 +4,13 @@ import { Product } from '../../common/product';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CartItem } from '../../common/cart-item';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive,NgbModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive, NgbModule],
   templateUrl: './product-list-grid.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -22,9 +24,9 @@ export class ProductListComponent implements OnInit {
   thePageSize: number = 5;
   theTotalElements: number = 0;
 
-  previousKeyword : string = "";
+  previousKeyword: string = "";
 
-  constructor(private productService: ProductService,
+  constructor(private productService: ProductService, private cartService: CartService,
     private route: ActivatedRoute) {
 
   }
@@ -44,16 +46,16 @@ export class ProductListComponent implements OnInit {
   handleSearchProduct() {
     const theKeyword: string = this.route.snapshot.paramMap.get('keyword')!;
 
-    if(this.previousKeyword != theKeyword) {
-      this.thePageNumber =1;
+    if (this.previousKeyword != theKeyword) {
+      this.thePageNumber = 1;
     }
 
-    this.previousKeyword =theKeyword;
+    this.previousKeyword = theKeyword;
 
     //now search for the products using keyword
-    this.productService.searchProductsPaginate(this.thePageNumber -1,
-                                              this.thePageSize,
-                                              theKeyword).subscribe(this.processResult());
+    this.productService.searchProductsPaginate(this.thePageNumber - 1,
+      this.thePageSize,
+      theKeyword).subscribe(this.processResult());
   }
   handleListProduct() {
     //check if "id" parameter is available  
@@ -72,14 +74,21 @@ export class ProductListComponent implements OnInit {
     this.previousCategoryId = this.currentCategoryId;
     console.log(`currentCategoryId=${this.currentCategoryId}, thePageNumber=${this.thePageNumber}`);
 
-    this.productService.getProductListPaginate(this.thePageNumber -1,
-                                              this.thePageSize,
-                                              this.currentCategoryId ).subscribe(this.processResult());
+    this.productService.getProductListPaginate(this.thePageNumber - 1,
+      this.thePageSize,
+      this.currentCategoryId).subscribe(this.processResult());
   }
   updatePageSize(pageSize: string) {
     this.thePageSize = +pageSize;
     this.thePageNumber = 1;
     this.listProducts();
+  }
+
+  addToCart(theProduct: Product) {
+    console.log(`Adding to cart: ${theProduct.name}, ${theProduct.unitPrice}`);
+    const theCartItem = new CartItem(theProduct);
+
+    this.cartService.addToCart(theCartItem);
   }
 
   processResult() {

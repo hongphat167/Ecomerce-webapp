@@ -3,6 +3,8 @@ import { Product } from '../../common/product';
 import { ProductService } from '../../services/product.service';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart.service';
+import { CartItem } from '../../common/cart-item';
 
 @Component({
   selector: 'app-product-details',
@@ -13,7 +15,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ProductDetailsComponent {
   product! : Product;
-  constructor(private productService : ProductService,
+  constructor(private productService : ProductService, private carService: CartService,
     private route: ActivatedRoute) {
 
     }
@@ -31,4 +33,10 @@ export class ProductDetailsComponent {
       }
     )
   }
+  addToCart() {
+    console.log(`Adding to cart: ${this.product.name}, ${this.product.unitPrice}`);
+    const theCartItem = new CartItem(this.product);
+    this.carService.addToCart(theCartItem);
+  }
 }
+ 
