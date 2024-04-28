@@ -7,11 +7,12 @@
         <img src="assets/images/phatshop.png" alt="phatshop" class="img-responsive">
       </a>
     </div>
+
     <app-product-category-menu></app-product-category-menu>
+
   </aside>
   <!-- END MENU SIDEBAR-->
 
-  <!-- PAGE CONTAINER-->
   <div class="page-container">
     <!-- HEADER DESKTOP-->
     <header class="header-desktop">
@@ -20,7 +21,9 @@
           <div class="header-wrap">
 
             <app-search></app-search>
-
+ 
+            <app-login-status></app-login-status>
+            
             <app-cart-status></app-cart-status>
 
           </div>
@@ -30,14 +33,13 @@
     </header>
     <!-- END HEADER DESKTOP-->
 
-
     <!-- MAIN CONTENT-->
     <router-outlet></router-outlet>
 
   </div>
 </div>
 
-<!-- END PAGE CONTAINER-->
+<!-- ENDS PAGE CONTAINER -->
 
 <footer>
   <ul>
